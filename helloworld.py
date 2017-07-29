@@ -2,6 +2,7 @@ import pygame
 import sys
 from pygame.locals import *
 # init
+
 pygame.init()
 dp = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('hello')
@@ -14,15 +15,27 @@ pygame.key.set_repeat(1, 10)
 speed = 0
 lock = 1
 diry = -1
+dirx = 0
+barx = 0
 cx = 20
 cy = 530
 shotspeed = 1
+xspeed = 0
+hitx = 0
+GAMEOVER = 0
+
+
+def gameover():
+    myfont = pygame.font.SysFont("monospace", 50)
+    label = myfont.render("GAMEOVER!", 1, (255, 255, 0))
+    dp.blit(label, (350, 200))
 
 
 # main loop
 while not error:
     clk.tick(60)
-    dp.fill((0, 0, 0))
+    if not GAMEOVER:
+        dp.fill((0, 0, 0))
 
     # event
     for ev in pygame.event.get():
@@ -34,16 +47,29 @@ while not error:
         if ev.type == pygame.KEYDOWN:
             speed += 1
             if ev.key == K_d:
-                rect1.right += speed
-                rect1.left += speed
+                barx = 1
+                rect1.right += (barx * speed)
+                rect1.left += (barx * speed)
             if ev.key == K_a:
-                rect1.right -= speed
-                rect1.left -= speed
+                barx = -1
+                rect1.right += (barx * speed)
+                rect1.left += (barx * speed)
             if ev.key == K_SPACE:
                 cx = rect1.centerx
                 lock = 0
+                dirx = barx
+                xspeed = speed
         if ev.type == pygame.KEYUP:
             speed = 0
+
+    # unlocked
+    if lock:
+        cx = rect1.centerx
+        shotspeed = 0
+    else:
+        shotspeed += 1
+    cy += (diry * shotspeed)
+    cx += (dirx * xspeed)
 
     # stop
     if rect1.left < 0:
@@ -57,18 +83,25 @@ while not error:
         shotspeed = 0
         diry = 1
     if cy > 530:
+        hitx = cx
         cy = 530
         shotspeed = 0
         diry = -1
-    if lock:
-        cx = rect1.centerx
-        shotspeed = 0
-    else:
-        shotspeed += 1
-    cy += (diry * shotspeed)
+        if (hitx < rect1.left or hitx > rect1.right):
+            GAMEOVER = 1
+            gameover()
+            diry = 0
+            dirx = 0
+            barx = 0
+
+    if cx < 10:
+        cx = 10
+        dirx = 1
+    if cx > 790:
+        cx = 790
+        dirx = -1
 
     # draw
     pygame.draw.rect(dp, RED, rect1)
     pygame.draw.circle(dp, BLUE, (cx, cy), 20, 0)
-
     pygame.display.update()
