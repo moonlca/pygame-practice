@@ -34,39 +34,42 @@ def gameover():
 # main loop
 while not error:
     clk.tick(60)
-    if not GAMEOVER:
-        dp.fill((0, 0, 0))
 
     # event
     for ev in pygame.event.get():
-        # quit
+            # quit
         if ev.type == QUIT:
             pygame.quit()
             sys.exit()
-        # key move the rect1
-        if ev.type == pygame.KEYDOWN:
-            speed += 1
-            if ev.key == K_d:
-                barx = 1
-                rect1.right += (barx * speed)
-                rect1.left += (barx * speed)
-            if ev.key == K_a:
-                barx = -1
-                rect1.right += (barx * speed)
-                rect1.left += (barx * speed)
-            if ev.key == K_SPACE:
-                cx = rect1.centerx
-                lock = 0
-                dirx = barx
-                xspeed = speed
-        if ev.type == pygame.KEYUP:
-            speed = 0
+
+        if not GAMEOVER:
+            dp.fill((0, 0, 0))
+            # key move the rect1
+            if ev.type == pygame.KEYDOWN:
+                if ev.key == K_d:
+                    speed += 1
+                    barx = 1
+                    rect1.right += (barx * speed)
+                    rect1.left += (barx * speed)
+                if ev.key == K_a:
+                    speed += 1
+                    barx = -1
+                    rect1.right += (barx * speed)
+                    rect1.left += (barx * speed)
+                if ev.key == K_SPACE:
+                    cx = rect1.centerx
+                    lock = 0
+                    dirx = barx
+                    xspeed = speed
+            if ev.type == pygame.KEYUP:
+                speed = 0
 
     # unlocked
     if lock:
         cx = rect1.centerx
         shotspeed = 0
-    else:
+    elif not GAMEOVER:
+        dp.fill((0, 0, 0))
         shotspeed += 1
     cy += (diry * shotspeed)
     cx += (dirx * xspeed)
@@ -92,7 +95,6 @@ while not error:
             gameover()
             diry = 0
             dirx = 0
-            barx = 0
 
     if cx < 10:
         cx = 10
