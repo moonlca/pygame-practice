@@ -27,8 +27,12 @@ GAMEOVER = 0
 
 def gameover():
     myfont = pygame.font.SysFont("monospace", 50)
-    label = myfont.render("GAMEOVER!", 1, (255, 255, 0))
-    dp.blit(label, (350, 200))
+    label1 = myfont.render("GAMEOVER!", 2, (255, 255, 0))
+    label2 = myfont.render("press space to retry", 2, (255, 255, 0))
+
+    dp.blit(label1, (250, 200))
+    dp.blit(label2, (100, 250))
+
 
 
 # main loop
