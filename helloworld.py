@@ -24,7 +24,7 @@ xspeed = 0
 hitx = 0
 GAMEOVER = 0
 jumpout = 0
-
+scoreCounter = 0
 
 def gameover():
     myfont = pygame.font.SysFont("monospace", 50)
@@ -36,7 +36,8 @@ def gameover():
 
 
 def retry():
-    global speed, lock, diry, dirx, barx, cx, cy, shotspeed, xspeed, hitx, GAMEOVER, jumpout
+    global speed, lock, diry, dirx, barx, cx, cy, shotspeed, xspeed, hitx, GAMEOVER, jumpout, scoreCounter
+    scoreCounter = 0
     speed = 0
     lock = 1
     diry = -1
@@ -112,6 +113,7 @@ while not error:
         diry = 1
 # hit the board or gameover
     if cy > 530:
+        scoreCounter += 1
         hitx = cx
         cy = 530
         shotspeed = 0
@@ -132,6 +134,9 @@ while not error:
         dirx = -1
 
     # draw
+    myfont = pygame.font.SysFont("monospace", 50)
+    label3 = myfont.render("SCORE: " + str(scoreCounter), 2, (255, 255, 0))
+    dp.blit(label3, (250, 30))
     pygame.draw.rect(dp, RED, rect1)
     pygame.draw.circle(dp, BLUE, (cx, cy), 20, 0)
     pygame.display.update()
