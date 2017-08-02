@@ -24,6 +24,7 @@ xspeed = 0
 hitx = 0
 GAMEOVER = 0
 jumpout = 0
+scoreCounter = 0
 
 
 def gameover():
@@ -36,7 +37,7 @@ def gameover():
 
 
 def retry():
-    global speed, lock, diry, dirx, barx, cx, cy, shotspeed, xspeed, hitx, GAMEOVER, jumpout
+    global speed, lock, diry, dirx, barx, cx, cy, shotspeed, xspeed, hitx, GAMEOVER, jumpout, scoreCounter
     speed = 0
     lock = 1
     diry = -1
@@ -49,7 +50,7 @@ def retry():
     hitx = 0
     GAMEOVER = 0
     jumpout = 0
-
+    scoreCounter = 0
 
 
 # main loop
@@ -79,9 +80,9 @@ while not error:
                 if ev.key == K_SPACE:
                     if lock:
                         cx = rect1.centerx
-                        xspeed = speed
+                        xspeed = 15
                         dirx = barx
-
+                    xspeed = 15
                     lock = 0
             if ev.type == pygame.KEYUP:
                 speed = 0
@@ -112,6 +113,7 @@ while not error:
         diry = 1
 # hit the board or gameover
     if cy > 530:
+
         hitx = cx
         cy = 530
         shotspeed = 0
@@ -123,6 +125,17 @@ while not error:
             diry = 0
             dirx = 0
             jumpout = 1
+        elif (hitx < rect1.centerx):
+            dirx = -1
+            xspeed = int(xspeed + int((rect1.centerx - hitx) / 12) / 2)
+            scoreCounter += 1
+        elif (hitx > rect1.centerx):
+            dirx = 1
+            xspeed = int(xspeed + int((hitx - rect1.centerx) / 12) / 2)
+            scoreCounter += 1
+        elif(hitx == rect1.centerx):
+            dirx = -1 * dirx
+            scoreCounter += 1
 
     if cx < 10:
         cx = 10
@@ -132,6 +145,10 @@ while not error:
         dirx = -1
 
     # draw
+    myfont = pygame.font.SysFont("monospace", 50)
+    label3 = myfont.render("SCORE: " + str(scoreCounter), 2, (255, 255, 0))
+    dp.blit(label3, (250, 30))
+
     pygame.draw.rect(dp, RED, rect1)
     pygame.draw.circle(dp, BLUE, (cx, cy), 20, 0)
     pygame.display.update()
