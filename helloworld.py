@@ -29,7 +29,7 @@ jumpout = 0
 def gameover():
     myfont = pygame.font.SysFont("monospace", 50)
     label1 = myfont.render("GAMEOVER!", 2, (255, 255, 0))
-    label2 = myfont.render("press space to retry", 2, (255, 255, 0))
+    label2 = myfont.render("press enter to retry", 2, (255, 255, 0))
 
     dp.blit(label1, (250, 200))
     dp.blit(label2, (100, 250))
@@ -49,7 +49,6 @@ def retry():
     hitx = 0
     GAMEOVER = 0
     jumpout = 0
-    print(GAMEOVER)
 
 
 
@@ -78,14 +77,15 @@ while not error:
                     rect1.right += (barx * speed)
                     rect1.left += (barx * speed)
                 if ev.key == K_SPACE:
-                    cx = rect1.centerx
+                    if lock:
+                        cx = rect1.centerx
+                        xspeed = speed
+                        dirx = barx
+
                     lock = 0
-                    dirx = barx
-                    xspeed = speed
             if ev.type == pygame.KEYUP:
                 speed = 0
         if GAMEOVER:
-            print(GAMEOVER)
             if ev.type == pygame.KEYDOWN:
                 if ev.key == K_RETURN:
                     retry()
@@ -110,11 +110,13 @@ while not error:
         cy = 10
         shotspeed = 0
         diry = 1
+# hit the board or gameover
     if cy > 530:
         hitx = cx
         cy = 530
         shotspeed = 0
         diry = -1
+
         if (hitx < (rect1.left - 20) or hitx > (rect1.right + 20)) and not jumpout:
             GAMEOVER = 1
             gameover()
