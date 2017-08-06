@@ -82,7 +82,7 @@ while not error:
                         cx = rect1.centerx
                         xspeed = 15
                         dirx = barx
-                    xspeed = 15
+                    xspeed = 2
                     lock = 0
             if ev.type == pygame.KEYUP:
                 speed = 0
