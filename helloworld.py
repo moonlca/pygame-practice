@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import os
 from pygame.locals import *
 pygame.init()
 dp = pygame.display.set_mode((800, 600))
@@ -34,6 +35,8 @@ GAMEOVER = 0
 jumpout = 0
 scoreCounter = -1
 restart = False
+
+
 
 #creates the new randomly located hoop when called
 def newHoop():
@@ -71,6 +74,7 @@ def hoopCollide():
 
 #shows gameover screen and updates highscore
 def gameover():
+    os.system("python draw.py "+scoreCounter)
     global restart
     dp.fill((0, 0, 0))
     label1 = font1.render("GAMEOVER!", 2, WHITE)
